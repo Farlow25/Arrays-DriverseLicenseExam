@@ -1,0 +1,2 @@
+# Arrays-DriverseLicenseExam
+The purpose of this program is to grade the multiple choice portion of a DMV Driver's License Exam. The program will store the correct answers to all 20 questions in one array, ask the user to input the student's answers (which will be stored in another array), compare the two arrays, and then display whether the student passed or failed along with the number of correct answers, number of incorrect answers, and a list of the questions that were incorrectly answered.
