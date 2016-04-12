@@ -1,0 +1,132 @@
+/*	Homework 3 - Driver's License Exam
+	Cody Farlow
+	04/12/2016
+	CS M10A - Introduction to Programming using C++ - 30585
+*/
+
+/*	The purpose of this program is to grade the multiple choice
+	portion of a DMV Driver's License Exam. The program will store
+	the correct answers to all 20 questions in one array and compare
+	the user's input to distinguish whether the student passed or failed.
+	The student must have a score of at least 15 correct answers in order to
+	pass. Then, the program will compare the answers the user got wrong with
+	what the correct answer to that question was. 
+*/
+
+#include <iostream>
+
+using namespace std;
+
+// Function Prototypes
+bool validateInput(char);
+int checkAnswers();
+void getIncorrectAnswers();
+void getOutput(int);
+
+// Global constant variables (And Arrays)
+const int NUM_QUEST = 20;		// Constant integer for number of questions on exam
+const int PASSING_SCORE = 15;	// Constant integer for passing score for exam
+
+// Create an array for correct answers on the exam
+char correctAnswers[] {'B', 'D', 'A', 'A', 'C', 'A', 'B', 'A', 'C', 'D',
+						'B', 'C', 'D', 'A', 'D', 'C', 'C', 'B', 'D', 'A'};
+
+int incorrectAnsweredQuest[NUM_QUEST];	// Max they can get wrong is 20 questions
+char userAnswers[NUM_QUEST];			// Max they can answer is 20 questions
+
+int main()
+{
+
+	cout << "\tWelcome to the DMV Automated Driver's License Exam Multiple Choice Test" << endl;
+	cout << "\tRemember, you may only answer A, B, C, or D for each question" << endl;
+	cout << "\tResults about whether you pass or fail will be displayed at the end" << endl;
+	cout << "\tRemember to take your time and best of luck on the exam.\n\n";
+
+	int correctAnswersCount = 0;		// Count how many answers they answer correctly
+
+	for (int i = 0; i < NUM_QUEST; i++)
+	{
+		// Get user input and validate
+		do
+		{
+			cout << "Please answer your question for question #" << i + 1 << ": ";
+			cin >> userAnswers[i];
+		} while (!validateInput(userAnswers[i]));	// Create boolean to make sure it's a valid input
+	}
+
+	// Create an if statement to bring up incorrect questions 
+	correctAnswersCount = checkAnswers();
+	if (correctAnswersCount < NUM_QUEST)
+	{
+		getIncorrectAnswers();
+	}
+
+	getOutput(correctAnswersCount);
+
+	return 0;
+}
+
+void getOutput(int counter)
+{
+	// Use the counter you made above to determine/calculate whether the user passed or failed
+	cout << endl << "You have " << (counter >= PASSING_SCORE ? "PASSED" : "FAILED")
+		<< " the test." << endl << endl;
+
+	// Display how many the user answered both correctly and incorrectly
+	cout << "You have answered " << counter << " correctly and "
+		<< (NUM_QUEST - counter) << " incorrectly" << endl;
+
+	// If some answers were wrong, output what answer was wrong,
+	// what the correct answer was, and what was the user's answer
+	if (counter < NUM_QUEST)
+	{
+		cout << "The following questions were answered incorrectly: " << endl << endl;
+		for (int i = 0; i < NUM_QUEST - counter; i++)
+		{
+			cout << "Question #" << (incorrectAnsweredQuest[i] + 1) << ". Correct answer was "
+				<< correctAnswers[incorrectAnsweredQuest[i]] << ". Your answer was "
+				<< userAnswers[incorrectAnsweredQuest[i]] << endl;
+		}
+	}
+}
+
+void getIncorrectAnswers()
+{
+	int counter = 0;	// Index of incorrectAnsweredQuest array
+	for (int i = 0; i < NUM_QUEST; i++)
+	{
+		if (correctAnswers[i] != toupper(userAnswers[i]))
+		{
+			incorrectAnsweredQuest[counter] = i;
+			counter++;
+		}
+	}
+}
+
+
+int checkAnswers()
+{
+	int counter = 0;
+	for (int i = 0; i < NUM_QUEST; i++)
+	{
+		if (toupper(userAnswers[i]) == correctAnswers[i])
+			counter++;
+	}
+
+	return counter;
+}
+
+bool validateInput(char answer)
+
+{
+	// Only A, B, C, and D are valid for input
+	if (toupper(answer) != 'A' && toupper(answer) != 'B' &&
+		toupper(answer) != 'C' && toupper(answer) != 'D')
+	{
+		cout << "Invalid input! ";	// This makes sure they give a valid char input
+		return false;					// if invalid, user must enter again
+	}
+
+	return true;
+
+}
